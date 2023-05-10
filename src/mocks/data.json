@@ -1,0 +1,83 @@
+[
+    {
+        "zone": "reptiles",
+        "animals": [
+            {
+                "name": "ana",
+                "type": "iguana",
+                "comments": [
+                    {
+                        "id": "123qw0",
+                        "author": "marcos",
+                        "createdAt": "5/8/2023",
+                        "content": "ana doesn't like lettuce",
+                        "replies": [
+                            {
+                                "id": "74etrtrt3qw0",
+                                "author": "martha",
+                                "createdAt": "5/8/2023",
+                                "content": "I agree"
+                            },
+                            {
+                                "id": "74gfgfg3qw0",
+                                "author": "carlos",
+                                "createdAt": "5/8/2023",
+                                "content": "maybe"
+                            },
+                            {
+                                "id": "743ereqw0",
+                                "author": "gaby",
+                                "createdAt": "5/8/2023",
+                                "content": "I think so"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "mario",
+                "type": "cocodrilo",
+                "comments": [
+                    {
+                        "id": "456qw0",
+                        "author": "marcos",
+                        "createdAt": "5/8/2023",
+                        "content": "mario doesn't like fruits",
+                        "replies": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "zone": "mamiferos",
+        "animals": [
+            {
+                "name": "Jack",
+                "type": "oso",
+                "comments": [
+                    {
+                        "id": "122223qw0",
+                        "author": "martha",
+                        "createdAt": "5/8/2023",
+                        "content": "likes fishes",
+                        "replies": []
+                    }
+                ]
+            },
+            {
+                "name": "bruce",
+                "type": "mono",
+                "comments": [
+                    {
+                        "id": "456qw0",
+                        "author": "martha",
+                        "createdAt": "5/8/2023",
+                        "content": "likes bananas",
+                        "replies": []
+                    }
+                ]
+            }
+        ]
+    }
+]
