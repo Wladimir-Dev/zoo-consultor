@@ -1,6 +1,7 @@
 import { createContext, useEffect, useReducer, useState } from 'react'
 import dataJson from '../mocks/data.json'
-import { ZooContextType, Zoo, Animal, Search, Comment } from '../types'
+import { ZooContextType, Zoo, Animal, Search, Comment, Action } from '../types'
+
 
 enum SectionType {
   ZONA = 'ZONA',
@@ -8,7 +9,6 @@ enum SectionType {
   COMENTARIO = 'COMENTARIO',
   CLEAN = 'CLEAN',
 }
-
 interface Props {
   children: React.ReactNode;
 }
@@ -18,20 +18,10 @@ const INITIAL_STATE: Search = {
   comment: { id: '', author: '', createdAt: '', content: '', replies: [] }
 }
 
-type Action =
-  | { type: SectionType.ZONA, payload: string }
-  | { type: SectionType.ANIMAL, payload: { zone: string, animal: Animal } }
-  | { type: SectionType.COMENTARIO, payload: { zone: string, animal: Animal, comment: Comment } }
-  | { type: SectionType.CLEAN }
-
-
-
-
 const reducer = (state: Search, action: Action) => {
   const { type } = action;
   switch (type) {
     case SectionType.ZONA:
-      alert(action.payload)
       return {
         ...state, zone: action.payload
       }
@@ -65,9 +55,8 @@ export const ZooProvider: React.FC<Props> = ({ children }) => {
   const [animals, setAnimals] = useState<Animal[]>([])
   const [comments, setComments] = useState<Comment[]>([])
 
-  const [search, setSearch] = useState<Search>(INITIAL_STATE)
 
-  const [search2, dispatch] = useReducer(reducer, INITIAL_STATE)
+  const [search, dispatch] = useReducer(reducer, INITIAL_STATE)
 
   const [species] = useState<string[]>([
     'oso',
@@ -97,7 +86,7 @@ export const ZooProvider: React.FC<Props> = ({ children }) => {
 
 
   return (
-    <ZooContext.Provider value={{ zoo, setZoo, zones, species, animals, search, setSearch, comments, search2, dispatch }}>
+    <ZooContext.Provider value={{ zoo, setZoo, zones, species, animals, comments, search, dispatch }}>
       {children}
     </ZooContext.Provider>
   )

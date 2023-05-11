@@ -1,3 +1,17 @@
+export enum SectionType {
+  ZONA = 'ZONA',
+  ANIMAL = 'ANIMAL',
+  COMENTARIO = 'COMENTARIO',
+  CLEAN = 'CLEAN',
+}
+export type Action =
+  | { type: SectionType.ZONA; payload: string }
+  | { type: SectionType.ANIMAL; payload: { zone: string; animal: Animal } }
+  | {
+      type: SectionType.COMENTARIO
+      payload: { zone: string; animal: Animal; comment: Comment }
+    }
+  | { type: SectionType.CLEAN }
 
 export interface Comment {
   id: string
@@ -28,7 +42,5 @@ export type ZooContextType = {
   animals: Animal[]
   comments: Comment[]
   search: Search
-  setSearch: React.Dispatch<React.SetStateAction<Search>>
-  search2: Search
   dispatch
 }
