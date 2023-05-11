@@ -3,17 +3,11 @@ import { useId, useRef, useState } from "react"
 import { useZoo } from "../../hooks/useZoo"
 import { Animal, Comment } from "../../types"
 import { useNavigate } from "react-router-dom"
-// import { Comment } from "@mui/icons-material"
-// import { Comment } from "@mui/icons-material"
 
-interface reducerFake {
-    tipo: string
-    animal?: Animal
-    comment?: Comment
-}
+
 export const Search = () => {
     const searchId = useId()
-    const { zones, animals, findZone, setSearch, comments, findAnimal } = useZoo()
+    const { zones, animals, findZone, comments, findAnimal, dispatch } = useZoo()
     const [searchedZones, setSearchedZones] = useState<string>('')
     const [searchedAnimals, setSearchedAnimals] = useState<Animal[]>([])
     const [searchedComments, setSearchedComments] = useState<Comment[]>([])
@@ -22,44 +16,11 @@ export const Search = () => {
     const busqueda = useRef<string>('')
     const navigate = useNavigate()
 
-    const reducerFake = ({ tipo, animal, comment }: reducerFake) => {
-        switch (tipo) {
-            case 'zona':
-                setSearch(prev => ({ ...prev, zone: busqueda.current }))
-                navigate('/resultSearch')
-                break;
-            case 'animal':
-                (animal) &&
-                    setSearch(prev => ({
-                        ...prev,
-                        zone: findZone(animal),
-                        animal: { ...animal }
-                    }))
-                navigate('/resultSearch')
-                break;
-            case 'comentario':
-                if (comment) {
-                    const newAnimal = findAnimal(comment.id)
-                    newAnimal &&
-                        setSearch(prev => ({
-                            ...prev,
-                            zone: findZone(newAnimal),
-                            animal: newAnimal,
-                            comment: comment
-                        }))
-                }
 
-                navigate('/resultSearch')
-                break;
-
-            default:
-                break;
-        }
-    }
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setSearch({ zone: '', animal: { name: '', type: '', comments: [] }, comment: { id: '', author: '', createdAt: '', content: '' } })
 
+        dispatch({ type: 'CLEAN' })
         const target = e.currentTarget
 
         if (target[searchId].value == '') return
@@ -106,12 +67,24 @@ export const Search = () => {
                         <>
                             {
                                 searchedZones &&
-                                <li onClick={() => reducerFake({ tipo: 'zona' })}>{searchedZones}... Zona</li>
+                                <li
+                                    onClick={() => {
+                                        dispatch({ type: 'ZONA', payload: busqueda.current })
+                                        navigate('/resultSearch')
+                                    }}
+                                >
+                                    {searchedZones}... Zona</li>
                             }
                             {
                                 searchedAnimals?.length > 0
                                 && searchedAnimals.map(animal =>
-                                    <li key={`${animal.name}-${animal.type}`} onClick={() => reducerFake({ tipo: 'animal', animal: animal })} >
+                                    <li key={`${animal.name}-${animal.type}`}
+                                        onClick={() => {
+
+                                            dispatch({ type: 'ANIMAL', payload: { zone: findZone(animal), animal: { ...animal } } })
+                                            navigate('/resultSearch')
+                                        }}
+                                    >
                                         {busqueda.current}...{animal.name}-Animal
                                     </li>
                                 )
@@ -120,7 +93,13 @@ export const Search = () => {
                             {
                                 searchedComments?.length > 0
                                 && searchedComments.map(comment =>
-                                    <li key={`${comment.author}-${comment.content}`} onClick={() => reducerFake({ tipo: 'comentario', comment: comment })} >
+                                    <li key={`${comment.author}-${comment.content}`}
+                                        onClick={() => {
+                                            const newAnimal = findAnimal(comment.id)
+                                            if (newAnimal) dispatch({ type: 'COMENTARIO', payload: { zone: findZone(newAnimal), animal: { ...newAnimal }, comment: { ...comment } } })
+                                            navigate('/resultSearch')
+                                        }}
+                                    >
                                         {busqueda.current}...{comment.author}-Comentario
                                     </li>
                                 )
@@ -129,7 +108,13 @@ export const Search = () => {
                             {
                                 searchedReplies?.length > 0
                                 && searchedReplies.map(comment =>
-                                    <li key={`${comment.author}-${comment.content}`} onClick={() => reducerFake({ tipo: 'comentario', comment: comment })} >
+                                    <li key={`${comment.author}-${comment.content}`}
+                                        onClick={() => {
+                                            const newAnimal = findAnimal(comment.id)
+                                            if (newAnimal) dispatch({ type: 'COMENTARIO', payload: { zone: findZone(newAnimal), animal: { ...newAnimal }, comment: { ...comment } } })
+                                            navigate('/resultSearch')
+                                        }}
+                                    >
                                         {busqueda.current}...{comment.author}-Replie
                                     </li>
                                 )

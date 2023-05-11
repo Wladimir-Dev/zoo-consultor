@@ -3,8 +3,18 @@ import { ZooContext } from '../context/ZooContext'
 import { Comment, ZooContextType, Animal } from '../types'
 const NO_FOUND = -1
 export const useZoo = () => {
-  const { zoo, setZoo, zones, species, animals, search, setSearch, comments } =
-    useContext(ZooContext) as ZooContextType
+  const {
+    zoo,
+    setZoo,
+    zones,
+    species,
+    animals,
+    search,
+    setSearch,
+    comments,
+    search2,
+    dispatch,
+  } = useContext(ZooContext) as ZooContextType
 
   const consultExistence = (name: string, specie?: string) => {
     return specie
@@ -15,7 +25,6 @@ export const useZoo = () => {
     return animals.find((animal) =>
       animal.comments.some((comment) => comment.id == idComment)
     )
-    
   }
   const findZone = (animal: Animal) => {
     const auxZoo = zoo.find((item) =>
@@ -109,5 +118,7 @@ export const useZoo = () => {
     setSearch,
     comments,
     findAnimal,
+    search2,
+    dispatch,
   }
 }

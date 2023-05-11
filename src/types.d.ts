@@ -1,3 +1,4 @@
+
 export interface Comment {
   id: string
   author: string
@@ -28,4 +29,6 @@ export type ZooContextType = {
   comments: Comment[]
   search: Search
   setSearch: React.Dispatch<React.SetStateAction<Search>>
+  search2: Search
+  dispatch
 }
