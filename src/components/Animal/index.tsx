@@ -7,7 +7,7 @@ interface Props {
 export const Animal = ({ name, type}: Props) => {
     const { idZone } = useParams()
     return (
-        <Link to={`/detailsAnimal/${idZone}-${name}-${type}`}>
+        <Link to={`/detailsAnimal/${idZone}-${name.toLowerCase()}-${type.toLowerCase()}`}>
             <span>Nombre: {name} </span>
             <span>Especie: {type}</span>
         </Link>

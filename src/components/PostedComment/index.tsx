@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { FormComment } from '../FormComment';
 interface Props {
     comment: Comment
-    topCommentId: string | undefined
+    topCommentId?: string | undefined
 
 }
 export const PostedComment = ({ comment,topCommentId }: Props) => {

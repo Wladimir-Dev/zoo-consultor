@@ -1,18 +1,32 @@
 import { useContext } from 'react'
 import { ZooContext } from '../context/ZooContext'
-import { Comment, ZooContextType } from '../types'
+import { Comment, ZooContextType, Animal } from '../types'
 const NO_FOUND = -1
 export const useZoo = () => {
-  const { zoo, setZoo, zones, species, animals } = useContext(
-    ZooContext
-  ) as ZooContextType
+  const { zoo, setZoo, zones, species, animals, search, setSearch, comments } =
+    useContext(ZooContext) as ZooContextType
 
   const consultExistence = (name: string, specie?: string) => {
     return specie
-      ? animals.includes(`${name}-${specie}`)
+      ? animals.some((animal) => animal.name == name && animal.type == specie)
       : zones.includes(name.toLowerCase())
   }
-
+  const findAnimal = (idComment: string) => {
+    return animals.find((animal) =>
+      animal.comments.some((comment) => comment.id == idComment)
+    )
+    
+  }
+  const findZone = (animal: Animal) => {
+    const auxZoo = zoo.find((item) =>
+      item.animals.some(
+        (anmal) =>
+          anmal.name.toLowerCase() == animal.name &&
+          anmal.type.toLowerCase() == animal.type
+      )
+    )
+    return auxZoo?.zone || ''
+  }
   const addZone = (name: string) => {
     if (consultExistence(name)) {
       alert('Esta zona ya existe')
@@ -23,13 +37,14 @@ export const useZoo = () => {
   }
 
   const addAnimal = (idZone: string, specie: string, animalName: string) => {
-   
     if (consultExistence(animalName, specie)) {
       alert(`Este animal ya se encuentra registrado en una zona`)
       return true
     }
 
-    const indexCurrentZone = zoo.findIndex((item) => item.zone.toLowerCase() == idZone?.toLowerCase())
+    const indexCurrentZone = zoo.findIndex(
+      (item) => item.zone.toLowerCase() == idZone?.toLowerCase()
+    )
     if (indexCurrentZone != NO_FOUND) {
       const auxZoo = [...zoo]
       auxZoo[indexCurrentZone].animals.push({
@@ -42,7 +57,11 @@ export const useZoo = () => {
     return false
   }
 
-  const addComment = (currentRoute: string, newComment: Comment, topCommentId: string | undefined) => {
+  const addComment = (
+    currentRoute: string,
+    newComment: Comment,
+    topCommentId: string | undefined
+  ) => {
     const auxSplit = currentRoute?.split('-')
     const idZone = auxSplit ? auxSplit[0] : ''
     const animalName = auxSplit ? auxSplit[1] : ''
@@ -65,9 +84,13 @@ export const useZoo = () => {
         )
       } else {
         //busco posicion del comentario a asignar respuesta
-        const indexTopComment = zoo[indexCurrentZone].animals[indexCurrentAnimal].comments.findIndex((comment) => comment.id == topCommentId)
+        const indexTopComment = zoo[indexCurrentZone].animals[
+          indexCurrentAnimal
+        ].comments.findIndex((comment) => comment.id == topCommentId)
 
-        auxZoo[indexCurrentZone].animals[indexCurrentAnimal].comments[indexTopComment].replies?.push(newComment)
+        auxZoo[indexCurrentZone].animals[indexCurrentAnimal].comments[
+          indexTopComment
+        ].replies?.push(newComment)
       }
       setZoo(auxZoo)
     }
@@ -80,5 +103,11 @@ export const useZoo = () => {
     species,
     addAnimal,
     addComment,
+    animals,
+    findZone,
+    search,
+    setSearch,
+    comments,
+    findAnimal,
   }
 }

@@ -13,7 +13,7 @@ export const DetailsAnimal = () => {
     const type = auxSplit ? auxSplit[2] : ''
 
     const currentZone = zoo.find(item => item.zone == idZone)
-    const currentAnimal = currentZone?.animals.find(animal => (animal.name == name && animal.type == type))
+    const currentAnimal = currentZone?.animals.find(animal => (animal.name.toLowerCase() == name && animal.type.toLowerCase() == type))
     return (
         <section>
             <h2>{currentAnimal?.name}</h2>
