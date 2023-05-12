@@ -1,9 +1,10 @@
-import { Button, TextareaAutosize } from '@mui/material'
+import { Button, Stack} from '@mui/material'
 import React, { useId, useRef } from 'react'
 import { useZoo } from '../../hooks/useZoo'
 import { useParams } from 'react-router-dom'
 import { Comment } from '../../types'
 import { generatorRandomId } from '../../utilities/generatorRandomId'
+import { Form, InputUser, TextArea } from './styles'
 
 interface Props {
     topCommentId?: string
@@ -43,7 +44,10 @@ export const FormComment = ({ topCommentId, showForm }: Props) => {
         const userName = target[nameId].value
         const textContent = target[textAreaId].value
 
-        if (userName == '' || textContent == '') return
+        if (userName == '' || textContent == ''){
+            alert('Ambos campos son requeridos')
+            return
+        }
 
         const newComment = createComment(userName, textContent)
 
@@ -53,16 +57,27 @@ export const FormComment = ({ topCommentId, showForm }: Props) => {
         cleanInputs()
     }
     return (
-        <form action="" onSubmit={handleSubmit}>
-            <fieldset>
-                <label htmlFor={nameId}>Usuario</label>
+        <Form action="" onSubmit={handleSubmit} >
+            <Stack component='fieldset' spacing={1}>
+
+                <InputUser
+                    id={nameId}
+                    ref={nameRef}
+                    label="Nombre Usuario"
+                    name='nameId'
+                    placeholder='Gabriela Suarez...'
+                />
+            </Stack>
+            {/*  <fieldset>
                 <input ref={nameRef} type="text" id={nameId} placeholder='Gabriela Suarez...' />
-            </fieldset>
-            <fieldset>
-                {/* <textarea ref={textContentRef}  id={textAreaId} placeholder="ingresa un comentario..."></textarea> */}
-                <TextareaAutosize ref={textContentRef} id={textAreaId} minRows={2} placeholder="ingresa un comentario..." />
-            </fieldset>
-            <Button type="submit">Reply</Button>
-        </form>
+            </fieldset> */}
+
+            <Stack component='div' sx={{flexDirection:'row'}} gap={1}>
+                <TextArea ref={textContentRef} id={textAreaId} minRows={2} placeholder="ingresa un comentario..." />
+                <Button variant='contained' type="submit">Reply</Button>
+
+            </Stack>
+
+        </Form>
     )
 }

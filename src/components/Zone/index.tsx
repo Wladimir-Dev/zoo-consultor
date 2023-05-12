@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Carta } from './styles'
 interface Props {
   name?: string
 }
@@ -6,6 +7,8 @@ interface Props {
 export const Zone = ({ name }: Props) => {
 
   return (
-    <Link to={`/detailsZone/${name}`}>{name}</Link>
+    <Carta  >
+      <Link to={`/detailsZone/${name}`}>{name}</Link>
+    </Carta>
   )
 }

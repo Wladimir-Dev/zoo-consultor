@@ -1,41 +1,44 @@
 // import React from 'react'
 import { type Comment } from '../../types'
 import ReplyIcon from '@mui/icons-material/Reply';
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material'
+import { Avatar, Button,  CardActions, CardContent } from '@mui/material'
 import { useState } from 'react';
 import { FormComment } from '../FormComment';
+import { CommentCard, HeaderCard, Span } from './styles';
 interface Props {
     comment: Comment
     topCommentId?: string | undefined
 
 }
-export const PostedComment = ({ comment,topCommentId }: Props) => {
+export const PostedComment = ({ comment, topCommentId }: Props) => {
     const [addComment, setAddComment] = useState(false)
     return (
         <>
-            <Card sx={{ maxWidth: 345 }}>
-                <CardHeader
+            <CommentCard sx={{ maxWidth: 345 }}>
+                <HeaderCard
                     avatar={
-                        <Avatar sx={{ bgcolor: 'red[500]' }} aria-label="recipe">
-                            R
+                        <Avatar aria-label="recipe">
+                            {comment.author.split("", 1)}
                         </Avatar>
                     }
                     title={comment.author}
                     subheader={comment.createdAt}
                 />
                 <CardContent>
-                    <Typography variant="body2" color="text.secondary">
+                    <Span>
                         {comment.content}
-                    </Typography>
+                    </Span>
                 </CardContent>
-                <CardActions disableSpacing>
-                    <Button variant="text" startIcon={<ReplyIcon />} onClick={() => setAddComment(prev => !prev)} sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}>
+                <CardActions disableSpacing sx={{justifyContent:'end'}}>
+                    <Button variant="text" startIcon={<ReplyIcon />}
+                        onClick={() => setAddComment(prev => !prev)}
+                        sx={{ textTransform: 'capitalize', fontSize: '1.3rem', fontWeight: 'bold' }}>
                         Reply
                     </Button>
                 </CardActions>
-            </Card>
+            </CommentCard>
             {
-                addComment && <FormComment topCommentId={topCommentId} showForm={setAddComment}/>
+                addComment && <FormComment topCommentId={topCommentId} showForm={setAddComment} />
             }
         </>
     )

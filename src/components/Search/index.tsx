@@ -1,15 +1,18 @@
-import { Stack } from "@mui/material"
 import { useId, useRef, useState } from "react"
 import { useZoo } from "../../hooks/useZoo"
 import { Animal, Comment } from "../../types"
 import { FoundResults } from "../FoundZones"
 import { FoundAnimals } from "../FoundAnimals"
 import { FoundComments } from "../FoundComments"
+import { ContainerResults, ContainerSearch, Form } from "./styles"
+import SearchIcon from '@mui/icons-material/Search';
+import { List, ListItemButton } from "@mui/material"
+
 
 
 export const Search = () => {
     const searchId = useId()
-    const { zones, animals, comments, dispatch } = useZoo()
+    const { zones, dispatch, filterComment, filterReplies, filterAnimals } = useZoo()
 
     const [foundZones, setFoundZones] = useState<string>('')
     const [foundAnimals, setFoundAnimals] = useState<Animal[]>([])
@@ -19,6 +22,9 @@ export const Search = () => {
     const [showOptions, setShowOptions] = useState(false)
     const busqueda = useRef<string>('')
 
+    const hideForms = () => {
+        setShowOptions(false)
+    }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -33,46 +39,41 @@ export const Search = () => {
 
         zones.includes(busqueda.current) && setFoundZones(busqueda.current)
 
-        setFoundAnimals(animals.filter(
-            animal => animal.name == busqueda.current || animal.type == busqueda.current))
-
-        const searchedComments = comments.
-            filter(
-                comment => comment.author == busqueda.current || comment.content.includes(busqueda.current)).
-            map(newC => ({ id: newC.id, author: newC.author, createdAt: newC.createdAt, content: newC.content }))
-
-
-        const searchedReplies = comments.
-            map(auxc => ({ ...auxc, replies: auxc.replies?.filter(rep => rep.content.includes(busqueda.current)) })).
-            filter(item => item.replies && item.replies?.length > 0)
-
-        setFoundComments(searchedComments)
-        setFoundReplies(searchedReplies)
+        setFoundAnimals(filterAnimals(busqueda.current))
+        setFoundComments(filterComment(busqueda.current))
+        setFoundReplies(filterReplies(busqueda.current))
         setShowOptions(true)
     }
     return (
-        <form action="" onSubmit={handleSubmit}>
-            <Stack direction="row"  >
+        <Form action="" onSubmit={handleSubmit}>
+            <ContainerSearch direction="row"  >
+                <button type="submit">  <SearchIcon /></button>
                 <fieldset>
-                    <label htmlFor={searchId}></label>
                     <input type="text" id={searchId} placeholder="reptiles..." />
                 </fieldset>
-                <button type="submit"> buscar</button>
-            </Stack >
-            <section>
-
-                <ul onClick={() => setShowOptions(false)}>
+            </ContainerSearch >
+            {
+                showOptions &&
+                <List component="nav" aria-label="secondary mailbox folder" onClick={hideForms}>
                     {
-                        showOptions &&
-                        <>
-                            <FoundResults zones={foundZones} searchText={busqueda.current} />
-                            <FoundAnimals animals={foundAnimals} searchText={busqueda.current} />
-                            <FoundComments comments={foundComments} searchText={busqueda.current} />
-                            <FoundComments comments={foundReplies} searchText={busqueda.current} />
-                        </>
+                        foundZones.length > 0 &&
+                        <FoundResults zones={foundZones} searchText={busqueda.current} />
                     }
-                </ul>
-            </section>
-        </form>
+                    {
+                        foundAnimals.length > 0 &&
+                        <FoundAnimals animals={foundAnimals} searchText={busqueda.current} />
+                    }
+                    {
+                        foundComments.length > 0 &&
+                        <FoundComments comments={foundComments} searchText={busqueda.current} />
+                    }
+                    {
+                        foundReplies.length > 0 &&
+                        <FoundComments comments={foundReplies} searchText={busqueda.current} />
+                    }
+                </List>
+            }
+
+        </Form>
     )
 }

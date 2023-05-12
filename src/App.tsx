@@ -4,8 +4,8 @@ import { ListOfZones } from './components/ListOfZones'
 import { DetailsZone } from './components/DetailsZone'
 import { DetailsAnimal } from './components/DetailsAnimal'
 import { ZooProvider } from './context/ZooContext'
-import { Search } from './components/Search'
 import { ResultSearch } from './components/ResultSearch'
+import { Search } from './components/Search'
 
 function App() {
 
@@ -13,7 +13,7 @@ function App() {
     <ZooProvider>
       <div className='app'>
         <BrowserRouter>
-          <Search />
+        <Search />
           <Routes>
             <Route path='/' element={<ListOfZones />} />
             <Route path='/detailsZone/:idZone' element={<DetailsZone />}></Route>

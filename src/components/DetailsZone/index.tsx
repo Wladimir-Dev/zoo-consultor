@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FormAnimal } from '../FormAnimal'
 import { useZoo } from '../../hooks/useZoo'
-import { Button } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add';
 import { ListOfAnimals } from '../ListOfAnimals'
+import { ButtonAdd, Title } from './styles'
 
 export const DetailsZone = () => {
   const { idZone } = useParams()
@@ -16,10 +17,12 @@ export const DetailsZone = () => {
   return (
     <>
       <section>
-        <h2>zona {currentZone?.zone}</h2>
-        <Button onClick={() => setAddAnimal(prev => !prev)} variant="contained">Add Animal +</Button>
+        <Title>Zona de {currentZone?.zone}</Title>
         <ListOfAnimals animals={currentZone?.animals} />
       </section>
+       <ButtonAdd aria-label="add" size="large" onClick={() => setAddAnimal(prev => !prev)}>
+        <AddIcon fontSize="inherit" />
+      </ButtonAdd>
       {
         addAnimal && <FormAnimal showForm={showForm} />
       }

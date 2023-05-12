@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Zone } from '../Zone'
-import { ListZones } from './styles'
 import { FormZone } from '../FormZone'
 import { useZoo } from '../../hooks/useZoo'
+import Grid from '@mui/material/Unstable_Grid2'
+import AddIcon from '@mui/icons-material/Add';
+import { ButtonAdd, ContainerZones, Title } from './styles'
 export const ListOfZones = () => {
   const { zoo } = useZoo()
   const [addZone, setAddZone] = useState<boolean>(false)
@@ -10,14 +12,23 @@ export const ListOfZones = () => {
     setAddZone(state)
   }
   return (
-    <section>
-      <button onClick={() => setAddZone(prev => !prev)}>Add New Zone</button>
-      <ListZones>
-        {zoo?.map(item => <li key={item.zone}> <Zone name={item.zone} /></li>)}
-      </ListZones>
+
+    <ContainerZones component="section">
+      <Title>Zonas</Title>
+      <Grid container spacing={1} columns={{ xs: 12 }} sx={{ justifyContent: 'center' }}>
+        {zoo?.map(item =>
+          <Grid key={item.zone} xs={6}>
+            <Zone name={item.zone} />
+          </Grid>)
+        }
+      </Grid>
+
+      <ButtonAdd aria-label="add" size="large" onClick={() => setAddZone(prev => !prev)}>
+        <AddIcon fontSize="inherit" />
+      </ButtonAdd>
       {
         addZone && <FormZone showForm={showForm} />
       }
-    </section>
+    </ContainerZones>
   )
 }

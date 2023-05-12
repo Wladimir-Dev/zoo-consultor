@@ -1,5 +1,8 @@
 import React, { useId } from 'react'
 import { useZoo } from '../../hooks/useZoo'
+import { ButtonClose, Form, InputZone, Button, Title } from './styles';
+import CloseIcon from '@mui/icons-material/Close';
+import { Stack, TextField } from '@mui/material';
 
 interface Props {
   showForm: (state: boolean) => void;
@@ -7,7 +10,6 @@ interface Props {
 
 export const FormZone = ({ showForm }: Props) => {
   const { addZone } = useZoo()
-  const nameId = useId()
 
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -19,13 +21,22 @@ export const FormZone = ({ showForm }: Props) => {
   return (
 
 
-    <form action="" onSubmit={handleSubmit}>
-      <fieldset>
-        <label htmlFor={nameId}>Zona</label>
-        <input type="text" name="zoneName" id={nameId} placeholder='Reptiles...' />
-      </fieldset>
+    <Form action="" onSubmit={handleSubmit}>
+      <Title>Add New Zone</Title>
+      <Stack component='fieldset' spacing={1}>
 
-      <button type='submit'>Guardar Zona</button>
-    </form>
+        <InputZone
+          id="demo-helper-text-misaligned"
+          label="Name"
+          name='zoneName'
+        />
+      </Stack>
+
+
+      <Button type='submit' variant='contained'>Guardar Zona</Button>
+      <ButtonClose onClick={() => showForm(false)} >
+        <CloseIcon />
+      </ButtonClose>
+    </Form>
   )
 }

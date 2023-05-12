@@ -1,5 +1,5 @@
 // import React from 'react'
-import { List } from '@mui/material'
+import { List, Stack } from '@mui/material'
 import { Comment } from '../../types'
 import { PostedComment } from '../PostedComment'
 import { ListOfReplies } from '../ListOfReplies'
@@ -9,7 +9,7 @@ interface Props {
 export const ListOfComments = ({ comments }: Props) => {
 
     return (
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <Stack spacing={1} sx={{paddingBlockEnd:'1rem'}}>
             {
                 comments.length > 0
                     ? comments.map(comment => {
@@ -18,8 +18,8 @@ export const ListOfComments = ({ comments }: Props) => {
                             {
                                 comment.replies &&
                                     comment.replies.length > 0 &&
-                                    <List sx={{ marginLeft: '25px', gap: '5px' }}>
-                                        <ListOfReplies comments={comment.replies} topCommentId={comment.id} />
+                                    <List sx={{  gap: '5px',alignSelf:'end' }}>
+                                        <ListOfReplies comments={comment.replies} topCommentId={comment.id} hideBtnOption={false} />
                                     </List>
 
                             }
@@ -27,6 +27,6 @@ export const ListOfComments = ({ comments }: Props) => {
                     })
                     : <h2>No Hay Comentarios</h2>
             }
-        </List>
+        </Stack>
     )
 }

@@ -1,7 +1,10 @@
 import React, { useId } from 'react'
 import { useZoo } from '../../hooks/useZoo'
-import { Box, Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material'
 import { useParams } from 'react-router-dom'
+import { ButtonClose, Form, InputZone as InputName, Title } from '../FormZone/styles'
+import CloseIcon from '@mui/icons-material/Close';
+import { LabelInput, SelectAnm } from './styles'
 
 interface Props {
     showForm: (s: boolean) => void
@@ -9,7 +12,6 @@ interface Props {
 export const FormAnimal = ({ showForm }: Props) => {
     const { species, addAnimal } = useZoo()
     const specieId = useId()
-    const nameId = useId()
     const { idZone } = useParams()
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,24 +30,38 @@ export const FormAnimal = ({ showForm }: Props) => {
         }
     }
     return (
-        <form action="" onSubmit={handleSubmit}>
-            <fieldset>
-                <label htmlFor={nameId}>Nombre</label>
-                <input id={nameId} type="text" name='nameId' placeholder='Juana..' />
-            </fieldset>
-            <fieldset>
+        <Form action="" onSubmit={handleSubmit}>
+            <Title>Add New Animal</Title>
+            <Stack component='fieldset' spacing={1}>
+
+                <InputName
+                    id="demo-helper-text-misaligned"
+                    label="Animal Name"
+                    name='nameId'
+                    placeholder='Juana..'
+                />
+            </Stack>
+
+            <Stack>
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
-                        <InputLabel id={specieId}>Especie</InputLabel>
-                        <Select id={specieId} label="Especie" name='specieId' defaultValue=''>
+                        <LabelInput id={specieId}>Especie</LabelInput>
+                        <SelectAnm id={specieId} label="Especie" name='specieId' defaultValue=''>
                             {
-                                species.map(specie => <MenuItem key={specie} value={specie}>{specie}</MenuItem>)
+                                species.map(specie =>
+                                    <MenuItem key={specie} value={specie}>
+                                        {specie}
+                                    </MenuItem>
+                                )
                             }
-                        </Select>
+                        </SelectAnm>
                     </FormControl>
                 </Box>
-            </fieldset>
+            </Stack>
             <Button variant="contained" type='submit'>Guardar</Button>
-        </form>
+            <ButtonClose onClick={() => showForm(false)} >
+                <CloseIcon />
+            </ButtonClose>
+        </Form>
     )
 }

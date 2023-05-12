@@ -3,29 +3,52 @@ import { ZooContext } from '../context/ZooContext'
 import { Comment, ZooContextType, Animal } from '../types'
 const NO_FOUND = -1
 export const useZoo = () => {
-  const {
-    zoo,
-    setZoo,
-    zones,
-    species,
-    animals,
-    search,
-    setSearch,
-    comments,
-    search2,
-    dispatch,
-  } = useContext(ZooContext) as ZooContextType
+  const { zoo, setZoo, zones, species, animals, search, comments, dispatch } =
+    useContext(ZooContext) as ZooContextType
 
   const consultExistence = (name: string, specie?: string) => {
     return specie
       ? animals.some((animal) => animal.name == name && animal.type == specie)
       : zones.includes(name.toLowerCase())
   }
+
+  const filterComment = (searchText: string) => {
+    return comments
+      .filter(
+        (comment) =>
+          comment.author == searchText || comment.content.includes(searchText)
+      )
+      .map((newC) => ({
+        id: newC.id,
+        author: newC.author,
+        createdAt: newC.createdAt,
+        content: newC.content,
+      }))
+  }
+
+  const filterReplies = (searchText: string) => {
+    return comments
+      .map((auxc) => ({
+        ...auxc,
+        replies: auxc.replies?.filter(
+          (rep) => rep.author == searchText || rep.content.includes(searchText)
+        ),
+      }))
+      .filter((item) => item.replies && item.replies?.length > 0)
+  }
+
+  const filterAnimals = (searchText: string) => {
+    return animals.filter(
+      (animal) => animal.name == searchText || animal.type == searchText
+    )
+  }
+
   const findAnimal = (idComment: string) => {
     return animals.find((animal) =>
       animal.comments.some((comment) => comment.id == idComment)
     )
   }
+
   const findZone = (animal: Animal) => {
     const auxZoo = zoo.find((item) =>
       item.animals.some(
@@ -36,6 +59,7 @@ export const useZoo = () => {
     )
     return auxZoo?.zone || ''
   }
+
   const addZone = (name: string) => {
     if (consultExistence(name)) {
       alert('Esta zona ya existe')
@@ -106,19 +130,20 @@ export const useZoo = () => {
   }
   return {
     zoo,
-    setZoo,
     zones,
-    addZone,
     species,
+    animals,
+    search,
+    comments,
+    dispatch,
+    setZoo,
+    addZone,
     addAnimal,
     addComment,
-    animals,
     findZone,
-    search,
-    setSearch,
-    comments,
     findAnimal,
-    search2,
-    dispatch,
+    filterComment,
+    filterReplies,
+    filterAnimals,
   }
 }

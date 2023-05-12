@@ -1,3 +1,4 @@
+import { ListItemButton } from '@mui/material'
 import { useZoo } from '../../hooks/useZoo'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,14 +14,15 @@ export const FoundResults = ({ zones, searchText }: Props) => {
 
         <>{
             zones &&
-            <li
+            <ListItemButton
                 onClick={() => {
                     dispatch({ type: 'ZONA', payload: searchText })
                     navigate('/resultSearch')
                 }}
             >
                 {zones}... Zona
-            </li>}
+            </ListItemButton>
+        }
         </>
 
     )
