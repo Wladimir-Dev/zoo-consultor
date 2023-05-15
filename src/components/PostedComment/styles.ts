@@ -1,21 +1,24 @@
-import { Card, CardHeader, Typography, styled } from '@mui/material'
+import { Card as CardMUI, CardHeader as CardHeaderMUI, Typography as TypographyMUI, styled } from '@mui/material'
 
-export const CommentCard = styled(Card)({
-  minWidth:'19rem',
-  marginTop:'1rem'
-})
+export const Card = styled(CardMUI)({
+  minWidth: '19rem',
+  marginTop: '1rem',
+  '@media (min-width: 600px)': {
+    minWidth: '100%',
+  }
+}) as typeof CardMUI
 
-export const HeaderCard = styled(CardHeader)({
+export const CardHeader = styled(CardHeaderMUI)({
   textTransform: 'capitalize',
   '& .MuiAvatar-colorDefault': {
-    backgroundColor: '#007fff',
+    backgroundColor: '#065a1e',
   },
-  '& span':{
+  '& span': {
     fontSize: '1.2rem',
-    fontWeight:'bold'
+    fontWeight: 'bold',
   },
 })
-export const Span = styled(Typography)({
+export const Typography = styled(TypographyMUI)({
   fontSize: '1.3rem',
   textTransform: 'capitalize',
   textAlign: 'end',

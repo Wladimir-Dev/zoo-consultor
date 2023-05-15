@@ -1,9 +1,6 @@
 import { IconButton, styled } from '@mui/material'
 
-export const ContainerAnimals = styled('section')({
-  width: '90%',
-  margin: '0 auto',
-})
+
 export const Title = styled('h2')({
   color: 'white',
   textAlign: 'center',

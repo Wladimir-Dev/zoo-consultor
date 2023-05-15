@@ -1,4 +1,4 @@
-import { InputLabel, Select, styled } from '@mui/material'
+import { InputLabel, Select as SelectMUI, styled } from '@mui/material'
 
 export const LabelInput = styled(InputLabel)({
   color: 'black',
@@ -10,7 +10,7 @@ export const LabelInput = styled(InputLabel)({
     opacity: 1,
   }
 })
-export const SelectAnm = styled(Select)({
+export const Select = styled(SelectMUI)({
   backgroundColor: 'white',
   
 })

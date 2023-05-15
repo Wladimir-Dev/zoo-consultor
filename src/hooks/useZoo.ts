@@ -8,7 +8,11 @@ export const useZoo = () => {
 
   const consultExistence = (name: string, specie?: string) => {
     return specie
-      ? animals.some((animal) => animal.name == name && animal.type == specie)
+      ? animals.some(
+          (animal) =>
+            animal.name.toLowerCase() == name.toLowerCase() &&
+            animal.type.toLowerCase() == specie.toLowerCase()
+        )
       : zones.includes(name.toLowerCase())
   }
 
@@ -62,7 +66,6 @@ export const useZoo = () => {
 
   const addZone = (name: string) => {
     if (consultExistence(name)) {
-      alert('Esta zona ya existe')
       return false
     }
     setZoo((prev) => [...prev, { zone: name, animals: [] }])
@@ -70,10 +73,7 @@ export const useZoo = () => {
   }
 
   const addAnimal = (idZone: string, specie: string, animalName: string) => {
-    if (consultExistence(animalName, specie)) {
-      alert(`Este animal ya se encuentra registrado en una zona`)
-      return true
-    }
+    if (consultExistence(animalName, specie)) return false
 
     const indexCurrentZone = zoo.findIndex(
       (item) => item.zone.toLowerCase() == idZone?.toLowerCase()
@@ -87,18 +87,18 @@ export const useZoo = () => {
       })
       setZoo(auxZoo)
     }
-    return false
+    return true
   }
 
   const addComment = (
     currentRoute: string,
     newComment: Comment,
-    topCommentId: string | undefined
+    topCommentId?: string
   ) => {
     const auxSplit = currentRoute?.split('-')
-    const idZone = auxSplit ? auxSplit[0] : ''
-    const animalName = auxSplit ? auxSplit[1] : ''
-    const type = auxSplit ? auxSplit[2] : ''
+    const idZone = auxSplit[0]
+    const animalName = auxSplit[1]
+    const type = auxSplit[2]
 
     const indexCurrentZone = zoo.findIndex(
       (item) => item.zone.toLowerCase() == idZone?.toLowerCase()

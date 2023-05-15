@@ -1,24 +1,23 @@
 import { useId, useRef, useState } from "react"
 import { useZoo } from "../../hooks/useZoo"
 import { Animal, Comment } from "../../types"
-import { FoundResults } from "../FoundZones"
+import { FoundZones } from "../FoundZones"
 import { FoundAnimals } from "../FoundAnimals"
 import { FoundComments } from "../FoundComments"
-import { ContainerResults, ContainerSearch, Form } from "./styles"
+import { Stack, Form, Snackbar } from "./styles"
 import SearchIcon from '@mui/icons-material/Search';
-import { List, ListItemButton } from "@mui/material"
+import { List, Typography } from "@mui/material"
 
 
 
 export const Search = () => {
     const searchId = useId()
-    const { zones, dispatch, filterComment, filterReplies, filterAnimals } = useZoo()
+    const { zones, filterComment, filterReplies, filterAnimals } = useZoo()
 
     const [foundZones, setFoundZones] = useState<string>('')
     const [foundAnimals, setFoundAnimals] = useState<Animal[]>([])
     const [foundComments, setFoundComments] = useState<Comment[]>([])
     const [foundReplies, setFoundReplies] = useState<Comment[]>([])
-
     const [showOptions, setShowOptions] = useState(false)
     const busqueda = useRef<string>('')
 
@@ -29,15 +28,14 @@ export const Search = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        dispatch({ type: 'CLEAN' })
         const target = e.currentTarget
 
-        if (target[searchId].value == '') return
-
         busqueda.current = target[searchId].value
-        busqueda.current = busqueda.current.toLowerCase()
 
-        zones.includes(busqueda.current) && setFoundZones(busqueda.current)
+        if (!busqueda.current.trim()) return
+
+        busqueda.current = busqueda.current.toLowerCase()
+        zones.includes(busqueda.current) ? setFoundZones(busqueda.current) : setFoundZones('')
 
         setFoundAnimals(filterAnimals(busqueda.current))
         setFoundComments(filterComment(busqueda.current))
@@ -46,18 +44,17 @@ export const Search = () => {
     }
     return (
         <Form action="" onSubmit={handleSubmit}>
-            <ContainerSearch direction="row"  >
+            <Stack direction="row"  >
                 <button type="submit">  <SearchIcon /></button>
                 <fieldset>
                     <input type="text" id={searchId} placeholder="reptiles..." />
                 </fieldset>
-            </ContainerSearch >
-            {
-                showOptions &&
-                <List component="nav" aria-label="secondary mailbox folder" onClick={hideForms}>
+            </Stack >
+            <Snackbar open={showOptions} onClose={hideForms} sx={{ bgcolor: 'aliceblue' }}>
+                <List aria-label="secondary mailbox folder" onClick={hideForms} sx={{ width: '100%' }}>
                     {
                         foundZones.length > 0 &&
-                        <FoundResults zones={foundZones} searchText={busqueda.current} />
+                        <FoundZones zones={foundZones} searchText={busqueda.current} />
                     }
                     {
                         foundAnimals.length > 0 &&
@@ -71,8 +68,14 @@ export const Search = () => {
                         foundReplies.length > 0 &&
                         <FoundComments comments={foundReplies} searchText={busqueda.current} />
                     }
+                    {
+                        (foundZones.length == 0 && foundAnimals.length == 0 && foundComments.length == 0 && foundReplies.length == 0)
+                        && <Typography variant="subtitle1" >No Hay Resultados</Typography>
+                    }
                 </List>
-            }
+            </Snackbar>
+
+
 
         </Form>
     )

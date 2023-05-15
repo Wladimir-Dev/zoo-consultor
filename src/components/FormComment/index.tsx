@@ -1,10 +1,10 @@
-import { Button, Stack} from '@mui/material'
+import { Stack, TextFieldProps } from '@mui/material'
 import React, { useId, useRef } from 'react'
 import { useZoo } from '../../hooks/useZoo'
 import { useParams } from 'react-router-dom'
 import { Comment } from '../../types'
 import { generatorRandomId } from '../../utilities/generatorRandomId'
-import { Form, InputUser, TextArea } from './styles'
+import { Form, InputUser, TextArea, Button } from './styles'
 
 interface Props {
     topCommentId?: string
@@ -17,12 +17,13 @@ export const FormComment = ({ topCommentId, showForm }: Props) => {
     const textAreaId = useId()
     const { idAnimal: currentRoute } = useParams()
     const { addComment } = useZoo()
-    const nameRef = useRef<HTMLInputElement>(null)
+    const nameRef = useRef<TextFieldProps>(null)
     const textContentRef = useRef<HTMLTextAreaElement>(null)
 
     const cleanInputs = () => {
-        if (nameRef.current != undefined) (nameRef.current as HTMLInputElement).value = ''
-        if (textContentRef.current != undefined) (textContentRef.current as HTMLTextAreaElement).value = ''
+
+        if (textContentRef.current != undefined) textContentRef.current.value = ''
+        if (nameRef.current != undefined) nameRef.current.value = ''
     }
 
     const createComment = (userName: string, textContent: string) => {
@@ -44,15 +45,11 @@ export const FormComment = ({ topCommentId, showForm }: Props) => {
         const userName = target[nameId].value
         const textContent = target[textAreaId].value
 
-        if (userName == '' || textContent == ''){
-            alert('Ambos campos son requeridos')
-            return
-        }
+        if (!userName.trim() || !textContent.trim()) return
 
         const newComment = createComment(userName, textContent)
 
         currentRoute && addComment(currentRoute, newComment, topCommentId)
-
         showForm && showForm(false)
         cleanInputs()
     }
@@ -62,20 +59,17 @@ export const FormComment = ({ topCommentId, showForm }: Props) => {
 
                 <InputUser
                     id={nameId}
-                    ref={nameRef}
+                    inputRef={nameRef}
                     label="Nombre Usuario"
                     name='nameId'
                     placeholder='Gabriela Suarez...'
                 />
             </Stack>
-            {/*  <fieldset>
-                <input ref={nameRef} type="text" id={nameId} placeholder='Gabriela Suarez...' />
-            </fieldset> */}
-
-            <Stack component='div' sx={{flexDirection:'row'}} gap={1}>
+            <Stack component='div' sx={{ flexDirection: 'row' }} gap={1}>
                 <TextArea ref={textContentRef} id={textAreaId} minRows={2} placeholder="ingresa un comentario..." />
-                <Button variant='contained' type="submit">Reply</Button>
-
+                <Button variant='contained' type="submit" >
+                    Reply
+                </Button>
             </Stack>
 
         </Form>

@@ -1,6 +1,6 @@
-import { Stack, styled } from '@mui/material'
+import { Snackbar as SnackbarMUI, Stack as StackMUI, styled } from '@mui/material'
 
-export const ContainerSearch = styled(Stack)({
+export const Stack = styled(StackMUI)({
   padding: '1rem',
   backgroundColor: '#e7ebf0',
   borderRadius: '1rem',
@@ -11,7 +11,7 @@ export const ContainerSearch = styled(Stack)({
     borderStyle: 'none',
   },
   '& input': {
-    padding: '1rem',
+    padding: '1.5rem',
     borderStyle: 'none',
     borderRadius: '2rem',
     outline: 'none',
@@ -31,14 +31,27 @@ export const ContainerSearch = styled(Stack)({
 })
 export const Form = styled('form')({
   backgroundColor: 'white',
-  
-  // position: 'fixed',
-  // zIndex: 1,
   display: 'flex',
   flexDirection: 'column',
   gap: '1rem',
+  borderRadius: '.8rem',
+  position: 'relative',
 })
 export const ContainerResults = styled('section')({
   backgroundColor: 'aliceblue',
-  minHeight:'auto',
+  minHeight: 'auto',
+})
+
+export const Snackbar = styled(SnackbarMUI)({
+  position: 'absolute',
+  background: '#e7ebf0',
+  width: '100%',
+  borderBottomLeftRadius: '0.8rem',
+  borderBottomRightRadius: '0.8rem',
+  padding:'1rem',
+  height:'fit-content',
+  '&.MuiSnackbar-root': {
+    top: '6rem',
+    left: 0,
+  },
 })

@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useZoo } from "../../hooks/useZoo"
 import { Animal } from "../../types"
-import { ListItemButton } from "@mui/material"
+import { Divider, ListItem, ListItemButton, ListItemText } from "@mui/material"
 
 interface Props {
     animals: Animal[]
@@ -9,24 +9,28 @@ interface Props {
 }
 export const FoundAnimals = ({ animals, searchText }: Props) => {
     const { dispatch, findZone } = useZoo()
-    const navigate = useNavigate()
     return (
         <>
             {
                 animals?.length > 0
                 && animals.map(animal =>
-                    <ListItemButton key={`${animal.name}-${animal.type}`}
-                        onClick={() => {
-
-                            dispatch({ type: 'ANIMAL', payload: { zone: findZone(animal), animal: { ...animal } } })
-                            navigate('/resultSearch')
-                        }}
-                    >
-                        {searchText}...{animal.name}-Animal
-                    </ListItemButton>
+                    <ListItem>
+                        <ListItemButton
+                            key={`${animal.name}-${animal.type}`}
+                            component={Link}
+                            to={'/resultSearch'}
+                            onClick={() => {
+                                dispatch({ type: 'ANIMAL', payload: { zone: findZone(animal), animal: { ...animal } } })
+                            }}
+                        >
+                            <ListItemText>{searchText}</ListItemText>
+                            <ListItemText sx={{textAlign:'end'}}>......{animal.name}-{animal.type}-Animal</ListItemText>
+                        </ListItemButton>
+                    </ListItem>
                 )
 
             }
+            <Divider />
         </>
     )
 }

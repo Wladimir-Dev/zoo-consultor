@@ -44,3 +44,7 @@ export type ZooContextType = {
   search: Search
   dispatch
 }
+export interface AddedObj {
+  showForm: boolean,
+  added: boolean
+}

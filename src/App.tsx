@@ -1,19 +1,19 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
 import { ListOfZones } from './components/ListOfZones'
 import { DetailsZone } from './components/DetailsZone'
 import { DetailsAnimal } from './components/DetailsAnimal'
 import { ZooProvider } from './context/ZooContext'
 import { ResultSearch } from './components/ResultSearch'
 import { Search } from './components/Search'
+import { Container } from './AppStyles'
 
 function App() {
 
   return (
     <ZooProvider>
-      <div className='app'>
+      <Container>
         <BrowserRouter>
-        <Search />
+          <Search />
           <Routes>
             <Route path='/' element={<ListOfZones />} />
             <Route path='/detailsZone/:idZone' element={<DetailsZone />}></Route>
@@ -21,7 +21,8 @@ function App() {
             <Route path='/resultSearch' element={<ResultSearch />}></Route>
           </Routes>
         </BrowserRouter>
-      </div>
+      </Container>
+
     </ZooProvider>
   )
 }

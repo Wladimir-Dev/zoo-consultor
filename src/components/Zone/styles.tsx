@@ -1,15 +1,19 @@
-import {  Paper, styled } from "@mui/material";
+import { Paper as PaperMUI, styled } from "@mui/material";
 
-export const Carta = styled(Paper)({
-    backgroundColor: "#007fff",
-    fontSize:'1.5rem',
-    textTransform:'capitalize',
-    padding: '20px',
-    textAlign:'center',
-    cursor:'pointer',
+export const Paper = styled(PaperMUI)({
+    backgroundColor: "#065a1e",
+    fontSize: '1.5rem',
+    textTransform: 'capitalize',
+    textAlign: 'center',
+    cursor: 'pointer',
     '& a': {
         color: 'white',
-        textDecoration: 'none'
+        textDecoration: 'none',
+        width: '100%',
+        height: '100%',
+        padding: '20px',
+        display:'block'
+
 
     }
-}) as typeof Paper;
+}) as typeof PaperMUI;

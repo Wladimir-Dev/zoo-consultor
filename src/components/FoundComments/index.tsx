@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useZoo } from '../../hooks/useZoo'
 import { Comment } from '../../types'
-import { ListItemButton } from '@mui/material'
+import { Divider, ListItem, ListItemButton, ListItemText } from '@mui/material'
 interface Props {
     comments: Comment[]
     searchText: string
@@ -9,24 +9,34 @@ interface Props {
 
 export const FoundComments = ({ comments, searchText }: Props) => {
     const { dispatch, findZone, findAnimal } = useZoo()
-    const navigate = useNavigate()
+
+    const handleClick = (comment: Comment) => {
+        const newAnimal = findAnimal(comment.id)
+        if (newAnimal)
+            dispatch({ type: 'COMENTARIO', payload: { zone: findZone(newAnimal), animal: { ...newAnimal }, comment: { ...comment } } })
+    }
     return (
         <>
             {
                 comments?.length > 0
                 && comments.map(comment =>
-                    <ListItemButton key={`${comment.author}-${comment.content}`}
-                        onClick={() => {
-                            const newAnimal = findAnimal(comment.id)
-                            if (newAnimal) dispatch({ type: 'COMENTARIO', payload: { zone: findZone(newAnimal), animal: { ...newAnimal }, comment: { ...comment } } })
-                            navigate('/resultSearch')
-                        }}
-                    >
-                        {searchText}...{comment.author}-{comment.replies ?'Replies':'Comentario'}
-                    </ListItemButton>
+                    <ListItem>
+                        <ListItemButton
+                            key={`${comment.author}-${comment.content}`}
+                            onClick={() => handleClick(comment)}
+                            component={Link}
+                            to={'/resultSearch'}
+                        >
+                            <ListItemText>{searchText}</ListItemText>
+                            <ListItemText sx={{ textAlign: 'end' }}>
+                                ......{comment.author}-{comment.replies ? 'Replies' : 'Comentario'}
+                            </ListItemText>
+                        </ListItemButton>
+                    </ListItem>
                 )
 
             }
+            <Divider />
         </>
     )
 }

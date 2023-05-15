@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom'
 import { ListOfComments } from '../ListOfComments'
 import { FormComment } from '../FormComment'
 import { useZoo } from '../../hooks/useZoo'
-import { Stack } from '@mui/material'
 import { Title } from '../FormZone/styles'
+import { Stack, Box } from './styles'
 
 export const DetailsAnimal = () => {
     const { zoo } = useZoo()
@@ -22,7 +22,9 @@ export const DetailsAnimal = () => {
             {
                 currentAnimal && <ListOfComments comments={currentAnimal.comments} />
             }
-            <FormComment />
+            <Box >
+                <FormComment />
+            </Box>
         </Stack>
     )
 }

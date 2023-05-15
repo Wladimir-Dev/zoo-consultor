@@ -1,39 +1,38 @@
-import React, { useId } from 'react'
+import React, { useId, useState } from 'react'
 import { useZoo } from '../../hooks/useZoo'
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material'
+import { Alert, Box, FormControl, MenuItem, Snackbar, Stack } from '@mui/material'
 import { useParams } from 'react-router-dom'
-import { ButtonClose, Form, InputZone as InputName, Title } from '../FormZone/styles'
+import { Button, ButtonClose, Form, InputZone as InputName, Title } from '../FormZone/styles'
 import CloseIcon from '@mui/icons-material/Close';
-import { LabelInput, SelectAnm } from './styles'
+import { LabelInput, Select } from './styles'
+import { AddedObj } from '../../types'
 
 interface Props {
-    showForm: (s: boolean) => void
+    setAddAnimal: React.Dispatch<React.SetStateAction<AddedObj>>
 }
-export const FormAnimal = ({ showForm }: Props) => {
+export const FormAnimal = ({ setAddAnimal }: Props) => {
     const { species, addAnimal } = useZoo()
     const specieId = useId()
     const { idZone } = useParams()
+    const [successAnimal, setSuccessAnimal] = useState(true)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const specie = e.currentTarget.specieId.value
         const animalName = e.currentTarget.nameId.value
 
-        if (specie == '' || animalName == '') {
-            alert('Ambos campos son requeridos')
-            return
-        }
+        if (!specie.trim() || !animalName.trim()) return
 
         if (idZone) {
-            const show = addAnimal(idZone, specie, animalName)
-            showForm(show)
+            const added = addAnimal(idZone, specie, animalName)
+            setSuccessAnimal(added)
+            added && setAddAnimal({ showForm: false, added: true })
         }
     }
     return (
-        <Form action="" onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
             <Title>Add New Animal</Title>
             <Stack component='fieldset' spacing={1}>
-
                 <InputName
                     id="demo-helper-text-misaligned"
                     label="Animal Name"
@@ -46,7 +45,7 @@ export const FormAnimal = ({ showForm }: Props) => {
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
                         <LabelInput id={specieId}>Especie</LabelInput>
-                        <SelectAnm id={specieId} label="Especie" name='specieId' defaultValue=''>
+                        <Select id={specieId} label="Especie" name='specieId' defaultValue=''>
                             {
                                 species.map(specie =>
                                     <MenuItem key={specie} value={specie}>
@@ -54,14 +53,24 @@ export const FormAnimal = ({ showForm }: Props) => {
                                     </MenuItem>
                                 )
                             }
-                        </SelectAnm>
+                        </Select>
                     </FormControl>
                 </Box>
             </Stack>
             <Button variant="contained" type='submit'>Guardar</Button>
-            <ButtonClose onClick={() => showForm(false)} >
+            <ButtonClose onClick={() => setAddAnimal(prev => ({ ...prev, showForm: false }))} >
                 <CloseIcon />
             </ButtonClose>
+            <Snackbar
+                open={!successAnimal}
+                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+                autoHideDuration={2000}
+                onClose={() => setSuccessAnimal(prev => !prev)}
+            >
+                <Alert severity='error' sx={{ alignItems: 'center', fontSize: '1.5rem' }}>
+                    Animal ya Registrado
+                </Alert>
+            </Snackbar>
         </Form>
     )
 }

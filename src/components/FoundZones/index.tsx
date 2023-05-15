@@ -1,28 +1,29 @@
-import { ListItemButton } from '@mui/material'
+import { Divider, ListItem, ListItemButton, ListItemText } from '@mui/material'
 import { useZoo } from '../../hooks/useZoo'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 interface Props {
     zones: string
     searchText: string
 }
 
-export const FoundResults = ({ zones, searchText }: Props) => {
+export const FoundZones = ({ zones, searchText }: Props) => {
     const { dispatch } = useZoo()
-    const navigate = useNavigate()
     return (
 
         <>{
             zones &&
-            <ListItemButton
-                onClick={() => {
-                    dispatch({ type: 'ZONA', payload: searchText })
-                    navigate('/resultSearch')
-                }}
-            >
-                {zones}... Zona
-            </ListItemButton>
+            <ListItem >
+                <ListItemButton component={Link} to={'/resultSearch'}
+                    onClick={() => { dispatch({ type: 'ZONA', payload: searchText }) }} >
+                    <ListItemText>{zones}</ListItemText>
+                    <ListItemText sx={{ textAlign: 'end' }}>
+                        ......Zona
+                    </ListItemText>
+                </ListItemButton>
+            </ListItem>
         }
+            <Divider />
         </>
 
     )

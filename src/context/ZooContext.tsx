@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState } from 'react'
+import { createContext, useEffect, useReducer, useRef, useState } from 'react'
 import dataJson from '../mocks/data.json'
 import { ZooContextType, Zoo, Animal, Search, Comment, Action } from '../types'
 
@@ -23,13 +23,17 @@ const reducer = (state: Search, action: Action) => {
   switch (type) {
     case SectionType.ZONA:
       return {
-        ...state, zone: action.payload
+        ...state,
+        zone: action.payload,
+        animal: INITIAL_STATE.animal,
+        comment: INITIAL_STATE.comment
       }
     case SectionType.ANIMAL:
       return {
         ...state,
         zone: action.payload.zone,
-        animal: { ...action.payload.animal }
+        animal: { ...action.payload.animal },
+        comment: INITIAL_STATE.comment
 
       }
     case SectionType.COMENTARIO:
@@ -41,6 +45,7 @@ const reducer = (state: Search, action: Action) => {
       }
     case SectionType.CLEAN:
       return INITIAL_STATE
+
     default:
       return state
   }
@@ -54,7 +59,6 @@ export const ZooProvider: React.FC<Props> = ({ children }) => {
   const [zones, setZones] = useState<string[]>([])
   const [animals, setAnimals] = useState<Animal[]>([])
   const [comments, setComments] = useState<Comment[]>([])
-
 
   const [search, dispatch] = useReducer(reducer, INITIAL_STATE)
 
@@ -81,7 +85,6 @@ export const ZooProvider: React.FC<Props> = ({ children }) => {
     setZones(zoo.map((item) => item.zone.toLowerCase()))
     setAnimals(zoo.flatMap(item => item.animals.map(animal => ({ ...animal }))))
     setComments(zoo.flatMap(item => item.animals.flatMap(animal => animal.comments)))
-
   }, [zoo])
 
 

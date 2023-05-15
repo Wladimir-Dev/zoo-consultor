@@ -5,13 +5,20 @@ export const Form = styled('form')({
   position: 'fixed',
   top: '0',
   bottom: '0',
-  width: '90%',
+  width: '100%',
   padding: '5rem',
   display: 'flex',
   flexDirection: 'column',
   gap: '2rem',
   '& fieldset': {
     borderStyle: 'none',
+  },
+  
+  '@media (min-width: 768px)': {
+    maxWidth:'50rem',
+    maxHeight:'50rem',
+    top:'4rem',
+    padding:'10rem'
   },
 })
 export const ButtonClose = styled(IconButton)({
@@ -48,10 +55,13 @@ export const InputZone = styled(TextField)({
   },
 })
 export const Button=styled(ButtonMUI)({
-  backgroundColor: '#007fff',
+  backgroundColor: '#065a1e',
   width:'fit-content',
   alignSelf:'center',
   fontSize:'1.3rem',
   textTransform:'capitalize',
+  '&:hover':{
+    backgroundColor: '#065a1e',
+  }
   
 })
